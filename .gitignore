@@ -2,3 +2,4 @@ downloads/
 my_account*
 output.txt
 test*
+__pycache__
