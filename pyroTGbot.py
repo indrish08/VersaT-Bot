@@ -2,7 +2,7 @@ import os
 import subprocess
 from pyrogram import Client, emoji, filters
 # from pyrogram.types import BotCommand
-from utils import start, download_media
+from utils import start, help, download_media
 from datetime import datetime
 
 TARGET = 1118476751
@@ -29,21 +29,10 @@ def ping(client, message):
 @app.on_message(filters.command(["start"]))
 def start_command(client, message):
     start(client, message)
-    # message.reply_text("Welcome to JackUser bot! You can use /help to see available commands.")
 
 @app.on_message(filters.command(["help"]))
 def help_command(client, message):
-    help_text = """
-    Here are the available commands:
-    - /start - Start using the bot.
-    - /help - Display this help message.
-    - /ls - List directory.
-    - /download - or /dl to download files.
-    - /upload - or /up to upload files.
-    - /exec - or /e to execute shell commands.
-    - /ping - Check ping.
-    """
-    message.reply_text(help_text)
+    help(client, message)
 
 @app.on_message(filters.command(["ls"]))
 def list_directory(client, message):

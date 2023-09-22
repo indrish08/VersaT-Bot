@@ -5,7 +5,7 @@ from pyrogram import Client, emoji, filters
 def start(client, message):
     message.reply_text("Welcome to JackUser bot! You can use /help to see available commands.")
 
-def help_command(client, message):
+def help(client, message):
     help_text = """
     Here are the available commands:
     - /start - Start using the bot.
