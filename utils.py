@@ -1,11 +1,28 @@
 import os
 import subprocess
+from datetime import datetime
+from time import time, monotonic
 from pyrogram import Client, emoji, filters
 
+async def ping(_, message):
+    print(message.text)
+    start_time = time()
+    reply = await message.reply('Pinging...',True)
+    end_time = time()
+    await reply.edit_text(f"Pong! \n{((end_time - start_time) * 1000):.2f} ms")
+
+# old
+# def ping(client, message):
+#     print(message.text)
+#     ping_time = (datetime.now() - message.date).total_seconds() * 1000 
+#     message.reply(f"Pong! \n{ping_time:.2f} ms" , True)
+
 def start(client, message):
-    message.reply_text("Welcome to JackUser bot! You can use /help to see available commands.")
+    print(message.text)
+    message.reply_text("Welcome to JackUser bot! You can use /help to see available commands.", True)
 
 def help(client, message):
+    print(message.text)
     help_text = """
     Here are the available commands:
     - /start - Start using the bot.
@@ -16,10 +33,10 @@ def help(client, message):
     - /exec - or /e to execute shell commands.
     - /ping - Check ping.
     """
-    message.reply_text(help_text)
+    message.reply(help_text, True)
 
 def list_directory(client, message):
-    # print(message)
+    print(message.text)
     path = os.getcwd()
     if(len(message.command) > 1):
         path += f'\\{message.command[1]}'
@@ -31,14 +48,17 @@ def list_directory(client, message):
         if(not os.path.isdir(i)):
             files += f'`{i}`\n'
     message.reply(files, True)
+    # print(files)
 
 def upload_media(client, message):
-    path = message.text[4:]
-    message.reply_document(open(path, 'rb'), True)
+    print(message.text)
+    path = message.command[1]
+    message.reply_document(open(path, 'rb'), True, file_name = path[path.rfind('/')+1:])
 
 def download_media(client, message):
+    print(message.text)
     if message.reply_to_message and message.reply_to_message.media:
-        msg = message.reply('Downloading...')
+        msg = message.reply('Downloading...', True)
         def progress(current, total):
             val = current * 50 // total
             txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%"
@@ -48,20 +68,27 @@ def download_media(client, message):
         file_path = client.download_media(message.reply_to_message, progress=progress)
         msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
     else:
-        message.reply_text("Please tag a media message with the /download command.")
+        message.reply_text("Please tag a media message with the /download command.", True)
       
-def tes(client, message):
+def exec(client, message):
+    print(message.text)
     if(len(message.command) < 2):
         message.reply('No commands to execute.', True)
         return
-    print(message.command)
-    output = subprocess.run(message.command[1:],shell=True, capture_output=True).stdout.decode()
-    # print(output)
-    if(len(output) > 4095):
-        with open('output.txt', 'w') as f:
-            f.write(output)
-        # message.reply("Output is too long.", True)
-        message.reply_document(open('output.txt', 'rb'), True)
+    # print(message.command)
+    try:
+        output = subprocess.run(message.command[1:],shell=False, capture_output=True).stdout.decode()
+    except Exception as e:
+        message.reply(f'{e} \'{message.command[1]}\'',True)
+        return
     else:
-        message.reply(output, True)
-    print(message.text)
+        if len(output) == 0:
+            message.reply("No Output", True)
+        elif(len(output) > 4095):
+            with open('output.txt', 'w') as f:
+                f.write(output)
+            # message.reply("Output is too long.", True)
+            message.reply_document(open('output.txt', 'rb'), True)
+        else:
+            message.reply(output, True)
+        
