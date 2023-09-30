@@ -69,6 +69,7 @@ async def download_media(client, message):
                 time.sleep(5)
         file_path = await client.download_media(message.reply_to_message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
+        message = message.reply_to_message
     else:
         await message.reply_text("Please tag a media message with the /download command.", True)
       
