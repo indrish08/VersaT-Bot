@@ -56,21 +56,21 @@ def upload_media(client, message):
     path = message.command[1]
     message.reply_document(open(path, 'rb'), True, file_name = path[path.rfind('/')+1:])
 
-def download_media(client, message):
+async def download_media(client, message):
     print(message.text)
     while message.reply_to_message and message.reply_to_message.media:
-        msg = message.reply('Downloading...', True)
-        def progress(current, total):
+        msg = await message.reply('Downloading...', True)
+        async def progress(current, total):
             val = current * 50 // total
             txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%"
             if(msg.text != txt):
-                msg.edit_text(txt)
+                await msg.edit_text(txt)
                 msg.text = txt
                 time.sleep(5)
-        file_path = client.download_media(message.reply_to_message, progress=progress)
-        msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
+        file_path = await client.download_media(message.reply_to_message, progress=progress)
+        await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
     else:
-        message.reply_text("Please tag a media message with the /download command.", True)
+        await message.reply_text("Please tag a media message with the /download command.", True)
       
 def exec(client, message):
     print(message.text)

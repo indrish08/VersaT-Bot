@@ -33,8 +33,8 @@ def upload_media_cmd(client, message):
     utils.upload_media(client, message)
 
 @app.on_message(filters.command(['download', 'dl']))
-def download_media_cmd(client, message):
-    utils.download_media(client, message)
+async def download_media_cmd(client, message):
+    await utils.download_media(client, message)
       
 @app.on_message(filters.command(['exec', 'e']))
 def exec_cmd(client, message):
