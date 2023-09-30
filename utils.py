@@ -65,6 +65,7 @@ def download_media(client, message):
             if(msg.text != txt):
                 msg.edit_text(txt)
                 msg.text = txt
+                time.sleep(5)
         file_path = client.download_media(message.reply_to_message, progress=progress)
         msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
     else:
