@@ -39,7 +39,7 @@ def list_directory(client, message):
     print(message.text)
     path = os.getcwd()
     if(len(message.command) > 1):
-        path += f'\\{message.command[1]}'
+        path += f'/{message.command[1]}'
     files = f'Current Folder : `{os.path.basename(path)}`\n\n'
     for i in os.listdir(path):
         if(os.path.isdir(i)):
@@ -57,7 +57,7 @@ def upload_media(client, message):
 
 def download_media(client, message):
     print(message.text)
-    if message.reply_to_message and message.reply_to_message.media:
+    while message.reply_to_message and message.reply_to_message.media:
         msg = message.reply('Downloading...', True)
         def progress(current, total):
             val = current * 50 // total
