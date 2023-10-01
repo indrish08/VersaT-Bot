@@ -68,12 +68,15 @@ async def download_media(client, message):
         # print(message.video)
         msg = await message.reply('Downloading...', True)
         async def progress(current, total):
-            val = current * 50 // total
-            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%\nFile Name : {message.document.file_name}\nSize : {message.document.file_size/1024/1024:.2f} MB"
+            t.sleep(8)
+            print(current,total)
+            val = current * 30 // total
+            txt = f'''Downloading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
+                        File Name : {message.document.file_name}
+                        Size : {message.document.file_size/1024/1024:.2f} MB'''
             if(msg.text != txt):
                 await msg.edit_text(txt)
                 msg.text = txt
-                t.sleep(5)
         file_path = await client.download_media(message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
     # else:
