@@ -59,10 +59,12 @@ def upload_media(client, message):
 async def download_media(client, message):
     print(message.text)
     while message.reply_to_message and message.reply_to_message.media:
+        print(message.document)
+        print(message.video)
         msg = await message.reply('Downloading...', True)
         async def progress(current, total):
             val = current * 50 // total
-            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%"
+            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%\nFile Name : {message.text}"
             if(msg.text != txt):
                 await msg.edit_text(txt)
                 msg.text = txt
