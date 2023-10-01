@@ -43,7 +43,7 @@ def exec_cmd(client, message):
 @app.on_message()
 def hello(client, message):
     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
-    # print(message.text)
+    print(message)
     message.reply("Hi...I am Alive !!", True)
 
 print("Starting Bot...")
