@@ -65,7 +65,7 @@ async def download_media(client, message):
         msg = await message.reply('Downloading...', True)
         async def progress(current, total):
             val = current * 50 // total
-            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%\nFile Name : {message.text}"
+            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%\nFile Name : {message.document.file_name}\nSize : {message.document.file_size/1024/1024:.2f} MB"
             if(msg.text != txt):
                 await msg.edit_text(txt)
                 msg.text = txt
