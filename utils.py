@@ -59,7 +59,8 @@ def upload_media(client, message):
 async def download_media(client, message):
     print(message.text)
     while message.reply_to_message and message.reply_to_message.media:
-        print(message+'\n-------------------------------------------------------')
+        print(message)
+        print('\n-------------------------------------------------------\n')
         message = message.reply_to_message
         print(message)
         print(message.reply_to_message)
