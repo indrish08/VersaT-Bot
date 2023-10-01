@@ -1,7 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
-import time
+import time as t
 from time import time, monotonic
 from pyrogram import Client, emoji, filters
 
@@ -66,7 +66,7 @@ async def download_media(client, message):
             if(msg.text != txt):
                 await msg.edit_text(txt)
                 msg.text = txt
-                time.sleep(5)
+                t.sleep(5)
         file_path = await client.download_media(message.reply_to_message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
         message = message.reply_to_message
