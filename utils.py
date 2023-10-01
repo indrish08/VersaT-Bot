@@ -59,6 +59,7 @@ def upload_media(client, message):
 async def download_media(client, message):
     print(message.text)
     while message.reply_to_message and message.reply_to_message.media:
+        message = message.reply_to_message
         print(message.document)
         print(message.video)
         msg = await message.reply('Downloading...', True)
@@ -69,9 +70,8 @@ async def download_media(client, message):
                 await msg.edit_text(txt)
                 msg.text = txt
                 t.sleep(5)
-        file_path = await client.download_media(message.reply_to_message, progress=progress)
+        file_path = await client.download_media(message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
-        message = message.reply_to_message
     else:
         await message.reply_text("Please tag a media message with the /download command.", True)
       
