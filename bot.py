@@ -46,9 +46,8 @@ def hello(client, message):
     print(message)
     message.reply("Hi...I am Alive !!", True)
 
-print("Starting Bot...")
+print("Starting Bot...") 
 app.run()  # Automatically start() and idle()
-
 
 # class message:
 #     def __init__(self) -> None:
