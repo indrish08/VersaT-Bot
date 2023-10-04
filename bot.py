@@ -49,6 +49,7 @@ def hello(client, message):
 print("Starting Bot...") 
 app.run()  # Automatically start() and idle()
 
+
 # class message:
 #     def __init__(self) -> None:
 #         self.command = [""]
