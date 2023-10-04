@@ -1,6 +1,7 @@
 import os
 import subprocess
 from datetime import datetime
+import time as t
 from time import time, monotonic
 from pyrogram import Client, emoji, filters
 
@@ -39,7 +40,7 @@ def list_directory(client, message):
     print(message.text)
     path = os.getcwd()
     if(len(message.command) > 1):
-        path += f'\\{message.command[1]}'
+        path += f'/{message.command[1]}'
     files = f'Current Folder : `{os.path.basename(path)}`\n\n'
     for i in os.listdir(path):
         if(os.path.isdir(i)):
@@ -55,20 +56,32 @@ def upload_media(client, message):
     path = message.command[1]
     message.reply_document(open(path, 'rb'), True, file_name = path[path.rfind('/')+1:])
 
-def download_media(client, message):
+async def download_media(client, message):
     print(message.text)
-    if message.reply_to_message and message.reply_to_message.media:
-        msg = message.reply('Downloading...', True)
-        def progress(current, total):
-            val = current * 50 // total
-            txt = f"Downloading...\n[{val*':'}{(50-val)*'.'}] {current*100/total:.2f}%"
+    while message.reply_to_message and message.reply_to_message.media:
+        print(message)
+        print(message.reply_to_message)
+        print('\n-------------------------------------------------------\n')
+        message = message.reply_to_message
+        print(message)
+        # print(message.document)
+        # print(message.video)
+        msg = await message.reply('Downloading...', True)
+        async def progress(current, total):
+            print(current,total)
+            val = current * 30 // total
+            txt = f'''Downloading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
+            File Name : {message.document.file_name}
+            Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
             if(msg.text != txt):
-                msg.edit_text(txt)
+                await msg.edit_text(txt)
                 msg.text = txt
-        file_path = client.download_media(message.reply_to_message, progress=progress)
-        msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
-    else:
-        message.reply_text("Please tag a media message with the /download command.", True)
+            t.sleep(8)
+        file_path = await client.download_media(message, progress=progress)
+        await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
+    # else:
+        # await message.reply_text("Please tag a media message with the /download command.", True)
+    await message.reply_text("Download Completed.", True)
       
 def exec(client, message):
     print(message.text)

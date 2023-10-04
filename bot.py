@@ -33,8 +33,8 @@ def upload_media_cmd(client, message):
     utils.upload_media(client, message)
 
 @app.on_message(filters.command(['download', 'dl']))
-def download_media_cmd(client, message):
-    utils.download_media(client, message)
+async def download_media_cmd(client, message):
+    await utils.download_media(client, message)
       
 @app.on_message(filters.command(['exec', 'e']))
 def exec_cmd(client, message):
@@ -43,7 +43,7 @@ def exec_cmd(client, message):
 @app.on_message()
 def hello(client, message):
     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
-    # print(message.text)
+    print(message)
     message.reply("Hi...I am Alive !!", True)
 
 print("Starting Bot...")
