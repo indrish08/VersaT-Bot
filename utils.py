@@ -54,10 +54,37 @@ def list_directory(client, message):
 def upload_media(client, message):
     print(message.text)
     path = message.command[1]
-    message.reply_document(open(path, 'rb'), True, file_name = path[path.rfind('/')+1:])
+    msg = message.reply('Uploading...', True)
+    async def progress(current, total):
+        print(current,total)
+        val = current * 30 // total
+        txt = f'''Uploading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
+        File Name : {message.document.file_name}
+        Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
+        if(msg.text != txt):
+            await msg.edit_text(txt)
+            msg.text = txt
+        t.sleep(8)
+    file = open(path, 'rb')
+    size = (os.path.getsize(path))
+    if(size > 2147483648):
+        message.reply_text("File size is too large. Please upload a file smaller than 2GB.", True)
+        subprocess.run(f"7z a -v10M '{path[:path.rfind('/')-1]}+/cache' 'path'")
+    message.reply_document(file, True, progress=progress, file_name = path[path.rfind('/')+1:])
 
 async def download_media(client, message):
     print(message.text)
+    async def progress(current, total):
+        print(current,total)
+        val = current * 30 // total
+        txt = f'''Downloading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
+        File Name : {message.document.file_name}
+        Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
+        if(msg.text != txt):
+            await msg.edit_text(txt)
+            msg.text = txt
+        t.sleep(8)
+    msg = await message.reply('Downloading...', True)
     while message.reply_to_message and message.reply_to_message.media:
         print(message)
         print(message.reply_to_message)
@@ -66,17 +93,6 @@ async def download_media(client, message):
         print(message)
         # print(message.document)
         # print(message.video)
-        msg = await message.reply('Downloading...', True)
-        async def progress(current, total):
-            print(current,total)
-            val = current * 30 // total
-            txt = f'''Downloading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
-            File Name : {message.document.file_name}
-            Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
-            if(msg.text != txt):
-                await msg.edit_text(txt)
-                msg.text = txt
-            t.sleep(8)
         file_path = await client.download_media(message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
     # else:
@@ -104,4 +120,9 @@ def exec(client, message):
             message.reply_document(open('output.txt', 'rb'), True)
         else:
             message.reply(output, True)
-        
+    
+def size_h(size):
+    for x in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024.0:
+            return f'{size:.2f} {x}'
+        size /= 1024.0
