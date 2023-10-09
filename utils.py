@@ -54,12 +54,13 @@ def list_directory(client, message):
 def upload_media(client, message):
     print(message.text)
     path = message.command[1]
+    file_name = path[path.rfind('/')+1:]
     msg = message.reply('Uploading...', True)
     async def progress(current, total):
-        print(current,total)
+        # print(current,total)
         val = current * 30 // total
-        txt = f'''Uploading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
-        File Name : {message.document.file_name}
+        txt = f'''Uploading...\n[{val*'='}{(30-val)*'.'}] {current*100/total:.2f}%
+        File Name : {file_name}
         Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
         if(msg.text != txt):
             await msg.edit_text(txt)
@@ -67,10 +68,16 @@ def upload_media(client, message):
         t.sleep(8)
     file = open(path, 'rb')
     size = (os.path.getsize(path))
-    if(size > 2147483648):
-        message.reply_text("File size is too large. Please upload a file smaller than 2GB.", True)
-        subprocess.run(f"7z a -v10M '{path[:path.rfind('/')-1]}+/cache' '{path}'")
-    message.reply_document(file, True, progress=progress, file_name = path[path.rfind('/')+1:])
+    if(size > 10000):
+        msg.edit_text("File size is too large. Please upload a file smaller than 2GB.")
+        subprocess.run(f"7z a -v10M {path[:path.rfind('/')]}/cache/{file_name} {path}".split(" "))
+        for f in os.listdir(f"{path[:path.rfind('/')]}/cache"):
+            # print(f)
+            message.reply_document(open(f"{path[:path.rfind('/')]}/cache/{f}", 'rb'), True, progress=progress, file_name = f)
+        msg.delete()
+    else:
+        message.reply_document(file, True, progress=progress, file_name = file_name)
+        msg.delete()
 
 async def download_media(client, message):
     print(message.text)
