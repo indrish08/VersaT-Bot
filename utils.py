@@ -68,16 +68,15 @@ def upload_media(client, message):
         t.sleep(8)
     file = open(path, 'rb')
     size = (os.path.getsize(path))
-    if(size > 10000):
+    if(size > 2147483648):
         msg.edit_text("File size is too large. Please upload a file smaller than 2GB.")
-        subprocess.run(f"7z a -v10M {path[:path.rfind('/')]}/cache/{file_name} {path}".split(" "))
+        subprocess.run(f"7z a -v2047M {path[:path.rfind('/')]}/cache/{file_name} {path}".split(" "))
         for f in os.listdir(f"{path[:path.rfind('/')]}/cache"):
             # print(f)
             message.reply_document(open(f"{path[:path.rfind('/')]}/cache/{f}", 'rb'), True, progress=progress, file_name = f)
-        msg.delete()
     else:
         message.reply_document(file, True, progress=progress, file_name = file_name)
-        msg.delete()
+    msg.delete()
 
 async def download_media(client, message):
     print(message.text)
