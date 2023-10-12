@@ -20,7 +20,7 @@ async def ping(_, message):
 
 def start(client, message):
     print(message.text)
-    message.reply_text("Welcome to JackUser bot! You can use /help to see available commands.", True)
+    message.reply_text("Welcome to VersaT bot! You can use /help to see available commands.", True)
 
 def help(client, message):
     print(message.text)
