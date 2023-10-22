@@ -83,7 +83,7 @@ async def download_media(client, message):
     async def progress(current, total):
         print(current,total)
         val = current * 30 // total
-        txt = f'''Downloading...\n[{val*':'}{(30-val)*'.'}] {current*100/total:.2f}%
+        txt = f'''Downloading...\n[{val*'█'}{(30-val)*'▒'}] {current*100/total:.2f}%
         File Name : {message.document.file_name}
         Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
         if(msg.text != txt):
