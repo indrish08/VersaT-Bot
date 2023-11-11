@@ -85,7 +85,7 @@ async def download_media(client, message):
         val = current * 30 // total
         txt = f'''Downloading...\n[{val*'█'}{(30-val)*'▒'}] {current*100/total:.2f}%
         File Name : {message.document.file_name if message.document is not None else message.video.file_name}
-        Progress : {current/1024/1024:.2f} of {(total/1024)/1024:.2f} MB'''
+        Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'''
         if(msg.text != txt):
             await msg.edit_text(txt)
             msg.text = txt
@@ -101,6 +101,8 @@ async def download_media(client, message):
         # print(message.video)
         file_path = await client.download_media(message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
+    if(message.command[1].startswith('http')):
+        subprocess.run('wget', message.command[1])
     # else:
         # await message.reply_text("Please tag a media message with the /download command.", True)
     await message.reply_text("Download Completed.", True)
