@@ -4,6 +4,8 @@ from datetime import datetime
 import time as t
 from time import time, monotonic
 from pyrogram import Client, emoji, filters
+import urllib.parse 
+import urllib.request
 
 async def ping(_, message):
     print(message.text)
@@ -101,10 +103,12 @@ async def download_media(client, message):
         # print(message.video)
         file_path = await client.download_media(message, progress=progress)
         await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
-    if(message.command[1].startswith('http')):
-        subprocess.run('wget', message.command[1])
     # else:
         # await message.reply_text("Please tag a media message with the /download command.", True)
+    if(message.command[1].startswith('http')):
+        data = urllib.parse.urlparse(message.command[1])
+        # print(data)
+        urllib.request.urlretrieve(message.command[1], filename=f'downloads/{os.path.basename(data.path)}')
     await message.reply_text("Download Completed.", True)
       
 def exec(client, message):
