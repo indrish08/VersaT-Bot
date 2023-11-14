@@ -1,3 +1,5 @@
+import config
+
 import os
 import subprocess
 from pyrogram import Client, emoji, filters
@@ -6,11 +8,11 @@ import utils
 
 TARGET = 1118476751
 
-api_id = '23275262'
-api_hash = '13d854f2fa5a9ba3c03639fd67c522aa'
-bot_token = '6533996464:AAF9JinShEREKWnwwZyD396fOmLnxmN-j0A'
+api_id = config.api_id
+api_hash = config.api_hash
+bot_token = config.bot_token
 
-app = Client("my_account", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
+app = Client("VersaT-bot", api_id, api_hash, bot_token=bot_token)
 
 @app.on_message(filters.command(['ping', 'p']))
 async def ping_cmd(client, message):
@@ -40,11 +42,11 @@ async def download_media_cmd(client, message):
 def exec_cmd(client, message):
     utils.exec(client, message)
 
-@app.on_message()
-def hello(client, message):
-    print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
-    print(message)
-    message.reply("Hi...I am Alive !!", True)
+# @app.on_message()
+# def hello(client, message):
+#     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
+#     print(message)
+#     message.reply("Hi...I am Alive !!", True)
 
 print("Starting Bot...") 
 app.run()  # Automatically start() and idle()

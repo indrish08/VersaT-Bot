@@ -5,3 +5,4 @@ unknown_errors*
 test*
 list*
 __pycache__
+config.py
