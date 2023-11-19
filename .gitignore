@@ -5,4 +5,5 @@ output.txt
 unknown_errors*
 list*
 dl.py
+*.bat
 # config.py
