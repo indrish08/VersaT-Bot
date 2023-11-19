@@ -82,7 +82,7 @@ def forward(client, message):
     for i in links:
         index = i.rfind('/')
         msg_ids.append(int(i[index+1 : ]))
-        chat_ids.append(int(i[i.rfind('/',0,index) : index]))
+        chat_ids.append(i[i.rfind('/',0,index)+1 : index])
     for i in range(len(msg_ids)):
         client.forward_messages(target_chat, chat_ids[i], msg_ids[i], True)
     
