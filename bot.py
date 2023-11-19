@@ -1,12 +1,12 @@
 import config
+from helper import TGFileHandler
 
+from time import time
 import os
 import subprocess
 from pyrogram import Client, emoji, filters
 # from pyrogram.types import BotCommand
 import utils
-
-TARGET = 1118476751
 
 api_id = config.api_id
 api_hash = config.api_hash
@@ -32,15 +32,19 @@ def list_directory_cmd(client, message):
 
 @app.on_message(filters.command(['upload', 'up']))
 def upload_media_cmd(client, message):
-    utils.upload_media(client, message)
+    TGFileHandler.upload_media(client, message)
 
 @app.on_message(filters.command(['download', 'dl']))
-async def download_media_cmd(client, message):
-    await utils.download_media(client, message)
+def download_media_cmd(client, message):
+    TGFileHandler.download_media(client, message)
       
 @app.on_message(filters.command(['exec', 'e']))
 def exec_cmd(client, message):
     utils.exec(client, message)
+
+@app.on_message(filters.command(['forward', 'f']))
+def forward(client, message):
+    utils.forward(client, message)
 
 # @app.on_message()
 # def hello(client, message):
@@ -50,11 +54,3 @@ def exec_cmd(client, message):
 
 print("Starting Bot...") 
 app.run()  # Automatically start() and idle()
-
-
-# class message:
-#     def __init__(self) -> None:
-#         self.command = [""]
-
-# if(input()=='ls'):
-#     utils.list_directory(Client, message())

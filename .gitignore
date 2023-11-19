@@ -1,8 +1,8 @@
+__pycache__
 downloads/
-my_account*
+*.session*
 output.txt
 unknown_errors*
-test*
 list*
-__pycache__
-config.py
+dl.py
+# config.py
