@@ -47,19 +47,19 @@ class TGFileHandler:
                 await msg.edit_text(txt)
                 msg.text = txt
             t.sleep(5)
-        msg = await message.reply('Downloading...', True)
+        msg = message.reply('Downloading...', True)
         while message.reply_to_message and message.reply_to_message.media:
-            print(message)
-            print(message.reply_to_message)
+            # print(message)
+            # print(message.reply_to_message)
             print('\n-------------------------------------------------------\n')
             message = message.reply_to_message
-            print(message)
+            # print(message)
             # print(message.document)
             # print(message.video)
             file_path = await client.download_media(message, progress=progress, progress_args = 'Down')
             msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
-        else:
-            message.reply_text("Please tag a media message with the /download command.", True)
+        # else:
+        #     message.reply_text("Please tag a media message with the /download command.", True)
         if message.command[1].startswith('http'):
             data = urllib.parse.urlparse(message.command[1])
             # print(data)
