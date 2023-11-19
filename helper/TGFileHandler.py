@@ -56,7 +56,7 @@ class TGFileHandler:
             # print(message)
             # print(message.document)
             # print(message.video)
-            file_path = await client.download_media(message, progress=progress, progress_args = 'Down')
+            file_path = client.download_media(message, progress=progress, progress_args = 'Down')
             msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
         # else:
         #     message.reply_text("Please tag a media message with the /download command.", True)
