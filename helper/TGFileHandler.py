@@ -69,7 +69,7 @@ class TGFileHandler:
                 msg.edit_text("Downloaded Failed!")
         elif len(message.command) > 1 and message.command[1].startswith('http'):
             msg = message.reply('Downloading...', True)
-            os.system(f'wget {message.command[1]} -P ./downloads')
+            os.system(f'wget {message.command[1]} -P {os.path.join(os.getcwd(), "downloads")}')
             msg.edit_text(f"Downloaded successfully to: \n`'downloads'`")
             # data = urllib.parse.urlparse(message.command[1])
             # # print(data)
