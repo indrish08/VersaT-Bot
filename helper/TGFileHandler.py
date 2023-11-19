@@ -4,7 +4,7 @@ import time as t
 import urllib.parse 
 import urllib.request
 
-class TgFileHandler:
+class TGFileHandler:
     def upload_media(client, message):
         print(message.text)
         if(len(message.command) == 1):
@@ -32,7 +32,7 @@ class TgFileHandler:
                 # print(f)
                 message.reply_document(open(f"{path[:path.rfind('/')]}/cache/{f}", 'rb'), True, progress=progress, file_name = f)
         else:
-            message.reply_document(file, True, progress=progress, file_name = file_name)
+            message.reply_document(file, True, caption=file_name, progress=progress, file_name = file_name)
         msg.delete()
 
     async def download_media(client, message):
