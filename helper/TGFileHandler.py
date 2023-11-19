@@ -50,7 +50,7 @@ class TGFileHandler:
     async def progress(current, total, type):
         print(current,total)
         val = current * 30 // total
-        txt = f'{type}loading...\n[{val*'■'}{(30-val)*'▢'}] {current*100/total:.2f}%\n' + \
+        txt = f'{type}loading...\n[{val*'█'}{(30-val)*'▒'}] {current*100/total:.2f}%\n' + \
         'File Name : {message.document.file_name if message.document is not None else message.video.file_name}\n' + \
         'Progress : {current/1024/1024:.2f} of {total/1024/1024:.2f} MB'
         if(msg.text != txt):
@@ -68,5 +68,3 @@ class TGFileHandler:
         #         await msg.edit_text(txt)
         #         msg.text = txt
         #     t.sleep(8)
-
-        ■■□
