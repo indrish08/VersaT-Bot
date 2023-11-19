@@ -37,14 +37,13 @@ class TGFileHandler:
         msg = message.reply('Uploading...', True)
         file = open(path, 'rb')
         size = os.path.getsize(path)
-        # if (size > 2147483648):
-        if (size > 10485760):
-            if os.path.exists(f'./downloads/{file_name}'):
-                os.remove(f'./downloads/{file_name}')
+        if (size > 2147483648):
+            if os.path.exists('./downloads/cache'):
+                os.mkdir('./downloads/cache')
             new_path = os.path.join(os.path.dirname(path), 'cache')
             # msg.edit_text("File size is too large. Please upload a file smaller than 2GB.")
             subprocess.run(
-                f"7z -mx0 a -v10M {os.path.join(new_path, file_name)} {path}".split(" "))
+                f"7z -mx0 a -v2047M {os.path.join(new_path, file_name)} {path}".split(" "))
             for file in os.listdir(new_path):
                 print(file)
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
