@@ -35,7 +35,7 @@ class TGFileHandler:
             message.reply_document(file, True, caption=file_name, progress=progress, file_name = file_name)
         msg.delete()
 
-    async def download_media(client, message):
+    def download_media(client, message):
         print(message.text)
         async def progress(current, total, type):
             print(current,total)
@@ -57,11 +57,11 @@ class TGFileHandler:
             # print(message.document)
             # print(message.video)
             file_path = await client.download_media(message, progress=progress, progress_args = 'Down')
-            await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
+            msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
         else:
-            await message.reply_text("Please tag a media message with the /download command.", True)
+            message.reply_text("Please tag a media message with the /download command.", True)
         if message.command[1].startswith('http'):
             data = urllib.parse.urlparse(message.command[1])
             # print(data)
             urllib.request.urlretrieve(message.command[1], filename=f'downloads/{os.path.basename(data.path)}')
-        await message.reply_text("Download Completed.", True)
+        message.reply_text("Download Completed.", True)
