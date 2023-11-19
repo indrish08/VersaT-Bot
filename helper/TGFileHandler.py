@@ -58,9 +58,9 @@ class TgFileHandler:
             # print(message.video)
             file_path = await client.download_media(message, progress=progress, progress_args = 'Down')
             await msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('down'):]}`")
-        # else:
-            # await message.reply_text("Please tag a media message with the /download command.", True)
-        elif message.command[1].startswith('http'):
+        else:
+            await message.reply_text("Please tag a media message with the /download command.", True)
+        if message.command[1].startswith('http'):
             data = urllib.parse.urlparse(message.command[1])
             # print(data)
             urllib.request.urlretrieve(message.command[1], filename=f'downloads/{os.path.basename(data.path)}')
