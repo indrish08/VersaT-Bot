@@ -18,7 +18,7 @@ class TGFileHandler:
             file_name = message.document.file_name if message.document is not None else message.video.file_name
         val = current * 15 // total
         txt = f"**{type}loading...**\n[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
-            f"**File Name :** {file_name}\n" + \
+            f"**File Name :** `{file_name}`\n" + \
             f"**Progress :** {current/1024/1024:.2f} of {total/1024/1024:.2f} MB"
         if msg.text != txt:
             await msg.edit_text(txt)
@@ -39,6 +39,8 @@ class TGFileHandler:
         size = os.path.getsize(path)
         # if (size > 2147483648):
         if (size > 10485760):
+            if os.path.exists(f'./downloads/{file_name}'):
+                os.remove(f'./downloads/{file_name}')
             new_path = os.path.join(os.path.dirname(path), 'cache')
             # msg.edit_text("File size is too large. Please upload a file smaller than 2GB.")
             subprocess.run(
@@ -46,7 +48,7 @@ class TGFileHandler:
             for file in os.listdir(new_path):
                 print(file)
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
-                                       True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, message, file])
+                                       True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, message, file], file_name=file)
         else:
             message.reply_document(file, True, caption=file_name, progress=progress, progress_args=[
                                    'Up', msg, message, file_name])
