@@ -51,6 +51,7 @@ def forward(client, message):
 #     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
 #     print(message)
 #     message.reply("Hi...I am Alive !!", True)
-
+if not os.path.exists('./downloads'):
+    os.mkdir('downloads')
 print("Starting Bot...") 
 app.run()  # Automatically start() and idle()
