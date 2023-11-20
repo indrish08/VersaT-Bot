@@ -25,27 +25,25 @@ class TGFileHandler:
             msg.text = txt
             if current == total:
                 return
-            t.sleep(5)
+            t.sleep(1)
 
     def upload_media(client, message, progress=progress):
         print(message.text)
         if (len(message.command) == 1):
             message.reply('Give link or file path to Upload.', True)
             return
-        path = message.command[1]
+        path = message.text[message.text.find(' ')+1 : ]
         file_name = os.path.basename(path)
         msg = message.reply('Uploading...', True)
         file = open(path, 'rb')
         size = os.path.getsize(path)
         if (size > 2147483648):
-            if os.path.exists('./downloads/cache'):
-                os.mkdir('./downloads/cache')
             new_path = os.path.join(os.path.dirname(path), 'cache')
-            # msg.edit_text("File size is too large. Please upload a file smaller than 2GB.")
-            subprocess.run(
-                f"7z -mx0 a -v2047M {os.path.join(new_path, file_name)} {path}".split(" "))
+            if os.path.exists(new_path) is False:
+                os.mkdir(new_path)
+            os.system(f'7z -mx0 a -v2047M \"{os.path.join(new_path, file_name)}\" \"{path}\"')
             for file in os.listdir(new_path):
-                print(file)
+                # print(file)
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
                                        True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, message, file], file_name=file)
         else:
