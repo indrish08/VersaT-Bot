@@ -2,3 +2,4 @@ pyrogram
 TgCrypto
 urllib3
 gdown
+py7zr
