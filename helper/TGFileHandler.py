@@ -25,7 +25,7 @@ class TGFileHandler:
             msg.text = txt
             if current == total:
                 return
-            t.sleep(1)
+            t.sleep(6)
 
     def upload_media(client, message, progress=progress):
         print(message.text)

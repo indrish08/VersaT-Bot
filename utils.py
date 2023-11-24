@@ -86,8 +86,9 @@ def forward(client, message):
     for i in range(len(msg_ids)):
         client.forward_messages(target_chat, chat_ids[i], msg_ids[i], True)
     
-def size_h(size):
+def size_h(size, decimal_point=2):
     for x in ['B', 'KB', 'MB', 'GB', 'TB']:
         if size < 1024.0:
             return f'{size:.2f} {x}'
         size /= 1024.0
+    return f"{size:.{decimal_point}f}{x}"
