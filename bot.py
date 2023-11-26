@@ -42,6 +42,10 @@ def download_media_cmd(client, message):
 def exec_cmd(client, message):
     utils.exec(client, message)
 
+@app.on_message(filters.command(['speedtest', 'st']))
+def speedtest_cmd(client, message):
+    utils.speedtest(client, message)
+
 @app.on_message(filters.command(['forward', 'f']))
 def forward(client, message):
     utils.forward(client, message)
@@ -51,6 +55,7 @@ def forward(client, message):
 #     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
 #     print(message)
 #     message.reply("Hi...I am Alive !!", True)
+
 if not os.path.exists('./downloads'):
     os.mkdir('downloads')
 print("Starting Bot...") 

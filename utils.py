@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time as t
+from speedtest import Speedtest
 
 from pyrogram import Client, emoji, filters
 
@@ -64,6 +65,20 @@ def exec(client, message):
             message.reply_document(open('output.txt', 'rb'), True)
         else:
             message.reply(output, True)
+
+def speedtest(_, message):
+    print(message.text)
+    st = Speedtest()
+    st.get_best_server()
+    st.download()
+    st.upload()
+    st.results.share()
+    res = st.results.dict()
+    msg = \
+        f'Internet Speed...\n' + \
+        f'Download : {size_h(res["download"]/8)} / s\n' + \
+        f'Upload : {size_h(res["upload"]/8)} / s'
+    message.reply(msg, True)
 
 def forward(client, message):
     print(message.text)

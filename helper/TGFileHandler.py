@@ -4,28 +4,25 @@ import time as t
 import urllib.parse
 import urllib.request
 import gdown
+import math
 
 
 class TGFileHandler:
     async def progress(current, total, *args):
-        print(current, total)
-        type = args[0]
-        msg = args[1]
-        message = args[2]
-        if len(args) > 3:
-            file_name = args[3]
-        else:
-            file_name = message.document.file_name if message.document is not None else message.video.file_name
-        val = current * 15 // total
-        txt = f"**{type}loading...**\n[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
-            f"**File Name :** `{file_name}`\n" + \
-            f"**Progress :** {current/1024/1024:.2f} of {total/1024/1024:.2f} MB"
-        if msg.text != txt:
+        print(current, total, math.ceil(t.time()))
+        if math.ceil(t.time())%2 == 0:
+            type = args[0]
+            msg = args[1]
+            message = args[2]
+            if len(args) > 3:
+                file_name = args[3]
+            else:
+                file_name = message.document.file_name if message.document is not None else message.video.file_name
+            val = current * 15 // total
+            txt = f"**{type}loading...**\n[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
+                f"**File Name :** `{file_name}`\n" + \
+                f"**Progress :** {current/1024/1024:.2f} of {total/1024/1024:.2f} MB"
             await msg.edit_text(txt)
-            msg.text = txt
-            if current == total:
-                return
-            t.sleep(6)
 
     def upload_media(client, message, progress=progress):
         print(message.text)
@@ -47,7 +44,7 @@ class TGFileHandler:
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
                                        True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, message, file], file_name=file)
         else:
-            message.reply_document(file, True, caption=file_name, progress=progress, progress_args=[
+            message.reply_document(file, True, caption=f'`{file_name}`', progress=progress, progress_args=[
                                    'Up', msg, message, file_name])
         msg.delete()
 
@@ -67,7 +64,7 @@ class TGFileHandler:
                 msg.edit_text("Downloaded Failed!")
         elif len(message.command) > 1 and message.command[1].startswith('http'):
             msg = message.reply('Downloading...', True)
-            os.system(f'wget {message.command[1]} -P {os.path.join(os.getcwd(), "downloads")}')
+            os.system(f'wget {message.command[1]} -P ./downloads')
             msg.edit_text(f"Downloaded successfully to: \n`'downloads'`")
             # data = urllib.parse.urlparse(message.command[1])
             # # print(data)
