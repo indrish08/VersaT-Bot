@@ -3,4 +3,4 @@ TgCrypto
 urllib3
 gdown
 py7zr
-speedtest
+speedtest-cli
