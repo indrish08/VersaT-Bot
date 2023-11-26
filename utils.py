@@ -68,17 +68,18 @@ def exec(client, message):
 
 def speedtest(_, message):
     print(message.text)
+    msg = message.reply('Speed Test Started...',True)
     st = Speedtest()
     st.get_best_server()
     st.download()
     st.upload()
     st.results.share()
     res = st.results.dict()
-    msg = \
+    text = \
         f'Internet Speed...\n' + \
         f'Download : {size_h(res["download"]/8)} / s\n' + \
         f'Upload : {size_h(res["upload"]/8)} / s'
-    message.reply(msg, True)
+    msg.edit(text)
 
 def forward(client, message):
     print(message.text)
