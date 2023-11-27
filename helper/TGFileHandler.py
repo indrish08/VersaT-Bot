@@ -10,14 +10,13 @@ import math
 class TGFileHandler:
     async def progress(current, total, *args):
         print(current, total, math.ceil(t.time()))
-        if math.ceil(t.time())%8 == 0:
+        start = args[2]
+        now = t.time()
+        diff = now - start
+        if round(diff % 10.00) == 0 or current == total:
             type = args[0]
             msg = args[1]
-            message = args[2]
-            if len(args) > 3:
-                file_name = args[3]
-            else:
-                file_name = message.document.file_name if message.document is not None else message.video.file_name
+            file_name = args[3]
             val = current * 15 // total
             txt = f"**{type}loading...**\n[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
                 f"**File Name :** `{file_name}`\n" + \
@@ -31,10 +30,10 @@ class TGFileHandler:
             return
         path = message.text[message.text.find(' ')+1 : ]
         file_name = os.path.basename(path)
-        msg = message.reply('Uploading...', True)
         file = open(path, 'rb')
         size = os.path.getsize(path)
         if (size > 2147483648):
+            msg = message.reply('Splitting...', True)
             new_path = os.path.join(os.path.dirname(path), 'cache')
             if os.path.exists(new_path) is False:
                 os.mkdir(new_path)
@@ -42,15 +41,15 @@ class TGFileHandler:
             for file in os.listdir(new_path):
                 # print(file)
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
-                                       True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, message, file], file_name=file)
+                                       True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, t.time(), file], file_name=file)
         else:
+            msg = message.reply('Uploading...', True)
             message.reply_document(file, True, caption=f'`{file_name}`', progress=progress, progress_args=[
-                                   'Up', msg, message, file_name])
+                                   'Up', msg, t.time(), file_name])
         msg.delete()
 
     def download_media(client, message, progress=progress):
         print(message.text)
-
         if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com'):
             url = message.command[1]
             msg = message.reply('Downloading...', True)
@@ -76,7 +75,8 @@ class TGFileHandler:
             # print('\n-------------------------------------------------------\n')
             # print(message.document)
             # print(message.video)
-            file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, message.reply_to_message])
+            file_name = message.document.file_name if message.document is not None else message.video.file_name
+            file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, t.time(), file_name])
             msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('downloads'):]}`")
         else:
             message.reply_text("Please tag a media message with the /download command.", True)

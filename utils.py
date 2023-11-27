@@ -26,6 +26,7 @@ def help(client, message):
             "- /download - or /dl to download files.\n" + \
             "- /upload - or /up to upload files.\n" + \
             "- /exec - or /e to execute shell commands.\n" + \
+            "- /speedtest - or /st to check internet speed.\n" + \
             "- /ping - Check ping."
     message.reply(help_text, True)
 
@@ -34,15 +35,15 @@ def list_directory(client, message):
     path = os.getcwd()
     if(len(message.command) > 1):
         path += f'/{message.command[1]}'
-    files = f'Current Folder : `{os.path.basename(path)}`\n\n'
-    for i in os.listdir(path):
+    files = f'Current Folder : `{os.path.basename(path)}`\n'
+    list_dir = os.listdir(path).sort()
+    for i in list_dir:
         if(os.path.isdir(i)):
-            files += f'📁 `{i}`\n'
-    for i in os.listdir(path):
+            files += f'\n📁 `{i}`'
+    for i in list_dir:
         if(not os.path.isdir(i)):
-            files += f'`{i}`\n'
+            files += f'`\n{i}` [{size_h(os.path.getsize(i))}]'
     message.reply(files, True)
-    # print(files)
 
 def exec(client, message):
     print(message.text)
