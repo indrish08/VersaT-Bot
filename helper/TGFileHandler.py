@@ -1,9 +1,9 @@
+from DirectLinkDL import DirectLinkDL as DDL
+from GdriveHelper import GdriveHelper as GDL
+
 import os
 import subprocess
 import time as t
-import urllib.parse
-import urllib.request
-import gdown
 import math
 
 
@@ -51,23 +51,9 @@ class TGFileHandler:
     def download_media(client, message, progress=progress):
         print(message.text)
         if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com'):
-            url = message.command[1]
-            msg = message.reply('Downloading...', True)
-            file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
-            if file_name:
-                if os.path.exists(f'./downloads/{file_name}'):
-                    os.remove(f'./downloads/{file_name}')
-                os.rename(file_name, f'./downloads/{file_name}')
-                msg.edit_text(f"Downloaded successfully to: \n`downloads\{file_name}`")
-            else:
-                msg.edit_text("Downloaded Failed!")
+            GDL.download(message)
         elif len(message.command) > 1 and message.command[1].startswith('http'):
-            msg = message.reply('Downloading...', True)
-            os.system(f'wget "{message.command[1]}" -P ./downloads')
-            msg.edit_text(f"Downloaded successfully to: \n`'downloads'`")
-            # data = urllib.parse.urlparse(message.command[1])
-            # # print(data)
-            # urllib.request.urlretrieve(message.command[1], filename=f'downloads/{os.path.basename(data.path)}')
+            DDL.download(message)
         elif message.reply_to_message and message.reply_to_message.media:
             msg = message.reply('Downloading...', True)
             print(message)
