@@ -9,7 +9,7 @@ import math
 
 class TGFileHandler:
     async def progress(current, total, *args):
-        print(current, total, math.ceil(t.time()))
+        # print(current, total, math.ceil(t.time()))
         start = args[2]
         now = t.time()
         diff = now - start
@@ -32,12 +32,12 @@ class TGFileHandler:
         file_name = os.path.basename(path)
         file = open(path, 'rb')
         size = os.path.getsize(path)
-        if (size > 2147483648):
+        if (size > 2097152000):
             msg = message.reply('Splitting...', True)
             new_path = os.path.join(os.path.dirname(path), 'cache')
             if os.path.exists(new_path) is False:
                 os.mkdir(new_path)
-            os.system(f'rar -m0 a -v2097M \"{os.path.join(new_path, file_name)}\" \"{path}\"')
+            os.system(f'rar -m0 a -v2097152000B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
             files = sorted(os.listdir(new_path))
             for file in files:
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
