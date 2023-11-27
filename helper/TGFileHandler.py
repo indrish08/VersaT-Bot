@@ -1,5 +1,5 @@
-from DirectLinkDL import DirectLinkDL as DDL
-from GdriveHelper import GdriveHelper as GDL
+from helper.DirectLinkDL import DirectLinkDL as DDL
+from helper.GdriveHelper import GdriveHelper as GDL
 
 import os
 import subprocess
