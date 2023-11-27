@@ -43,7 +43,7 @@ def list_directory(client, message):
     for i in list_dir:
         if(not os.path.isdir(i)):
             size = size_h(os.path.getsize(os.path.join(path,i)))
-            files += f'`\n{i}` [{size}]'
+            files += f'\n`{i}` [{size}]'
     message.reply(files, True)
 
 def exec(client, message):
