@@ -28,7 +28,10 @@ class TGFileHandler:
         if (len(message.command) == 1):
             message.reply('Give link or file path to Upload.', True)
             return
-        path = message.text[message.text.find(' ')+1 : ]
+        if message.command[1].startswith('http'):
+            path = DDL.download(message)
+        else:
+            path = message.text[message.text.find(' ')+1 : ]
         file_name = os.path.basename(path)
         file = open(path, 'rb')
         size = os.path.getsize(path)
