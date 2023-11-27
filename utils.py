@@ -36,7 +36,8 @@ def list_directory(client, message):
     if(len(message.command) > 1):
         path += f'/{message.command[1]}'
     files = f'Current Folder : `{os.path.basename(path)}`\n'
-    list_dir = os.listdir(path).sort()
+    list_dir = os.listdir(path)
+    list_dir.sort()
     for i in list_dir:
         if(os.path.isdir(i)):
             files += f'\n📁 `{i}`'
