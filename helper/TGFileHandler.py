@@ -10,7 +10,7 @@ import math
 class TGFileHandler:
     async def progress(current, total, *args):
         print(current, total, math.ceil(t.time()))
-        if math.ceil(t.time())%2 == 0:
+        if math.ceil(t.time())%8 == 0:
             type = args[0]
             msg = args[1]
             message = args[2]
@@ -64,7 +64,7 @@ class TGFileHandler:
                 msg.edit_text("Downloaded Failed!")
         elif len(message.command) > 1 and message.command[1].startswith('http'):
             msg = message.reply('Downloading...', True)
-            os.system(f'wget {message.command[1]} -P ./downloads')
+            os.system(f'wget "{message.command[1]}" -P ./downloads')
             msg.edit_text(f"Downloaded successfully to: \n`'downloads'`")
             # data = urllib.parse.urlparse(message.command[1])
             # # print(data)
