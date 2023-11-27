@@ -37,9 +37,9 @@ class TGFileHandler:
             new_path = os.path.join(os.path.dirname(path), 'cache')
             if os.path.exists(new_path) is False:
                 os.mkdir(new_path)
-            os.system(f'rar -m0 a -v2047M \"{os.path.join(new_path, file_name)}\" \"{path}\"')
-            for file in os.listdir(new_path):
-                # print(file)
+            os.system(f'rar -m0 a -v2147483648B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
+            files = sorted(os.listdir(new_path))
+            for file in files:
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
                                        True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, t.time(), file], file_name=file)
         else:

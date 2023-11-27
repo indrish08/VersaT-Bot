@@ -36,14 +36,14 @@ def list_directory(client, message):
     if(len(message.command) > 1):
         path += f'/{message.command[1]}'
     files = f'Current Folder : `{os.path.basename(path)}`\n'
-    list_dir = os.listdir(path)
-    list_dir.sort()
+    list_dir = sorted(os.listdir(path))
     for i in list_dir:
         if(os.path.isdir(i)):
             files += f'\n📁 `{i}`'
     for i in list_dir:
         if(not os.path.isdir(i)):
-            files += f'`\n{i}` [{size_h(os.path.getsize(i))}]'
+            size = size_h(os.path.getsize(os.path.join(path,i)))
+            files += f'`\n{i}` [{size}]'
     message.reply(files, True)
 
 def exec(client, message):
