@@ -70,12 +70,12 @@ class TGFileHandler:
             # urllib.request.urlretrieve(message.command[1], filename=f'downloads/{os.path.basename(data.path)}')
         elif message.reply_to_message and message.reply_to_message.media:
             msg = message.reply('Downloading...', True)
-            # print(message)
+            print(message)
             # print(message.reply_to_message)
             # print('\n-------------------------------------------------------\n')
             # print(message.document)
             # print(message.video)
-            file_name = message.document.file_name if message.document is not None else message.video.file_name
+            file_name = message.reply_to_message.document.file_name if message.reply_to_message.document is not None else message.reply_to_message.video.file_name
             file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, t.time(), file_name])
             msg.edit_text(f"Downloaded successfully to: \n`{file_path[file_path.rfind('downloads'):]}`")
         else:
