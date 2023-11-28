@@ -45,6 +45,7 @@ class TGFileHandler:
             for file in files:
                 message.reply_document(open(os.path.join(new_path, file), 'rb'),
                                        True, caption=f'`{file}`', progress=progress, progress_args=['Up', msg, t.time(), file], file_name=file)
+            os.remove(new_path)
         else:
             msg = message.reply('Uploading...', True)
             message.reply_document(file, True, caption=f'`{file_name}`', progress=progress, progress_args=[
