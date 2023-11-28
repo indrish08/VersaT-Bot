@@ -2,7 +2,7 @@ import os
 import gdown
 
 class GdriveHelper:
-    def gdown(message):
+    def download(message):
         url = message.command[1]
         msg = message.reply('Downloading...', True)
         file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
