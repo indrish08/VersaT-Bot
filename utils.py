@@ -82,7 +82,6 @@ def speedtest(_, message):
         f'Download : {size_h(res["download"]/8)} / s\n' + \
         f'Upload : {size_h(res["upload"]/8)} / s'
     message.reply_photo(res['share'], True, text)
-    message.reply_text(res)
     msg.delete()
 
 def forward(client, message):
