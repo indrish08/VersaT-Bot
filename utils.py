@@ -38,6 +38,7 @@ def list_directory(client, message):
     files = f'Current Folder : `{os.path.basename(path)}`\n'
     list_dir = sorted(os.listdir(path))
     for i in list_dir:
+        i = os.path.join(path,i);
         if(os.path.isdir(i)):
             files += f'\n📁 `{i}`'
     for i in list_dir:
