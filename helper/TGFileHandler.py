@@ -1,5 +1,6 @@
 from helper.DirectLinkDL import DirectLinkDL as DDL
 from helper.GdriveHelper import GdriveHelper as GDL
+from utils import size_h
 
 import os
 import shutil
@@ -7,22 +8,17 @@ import subprocess
 import time as t
 import math
 
-from pyrogram.types.messages_and_media.message import Message
-
 class TGFileHandler:
-    async def progress(current, total, *args):
-        start = args[2]
+    async def progress(current, total, type, msg, start, file_name):
         now = t.time()
         diff = now - start
         if round(diff % 10.00) == 0 or current == total:
-            type = args[0]
-            msg = args[1]
-            file_name = args[3]
             val = current * 15 // total
             txt = \
+                f"**{type}loading...**\n" + \
                 f"**File Name :** `{file_name}`\n" + \
-                f"**{type}loading...**\n[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
-                f"**Progress :** {current/1024/1024:.2f} of {total/1024/1024:.2f} MB"
+                f"[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
+                f"**Progress :** {size_h(current)} of {size_h(total)}"
             await msg.edit_text(txt)
 
     def upload_media(client, message):
@@ -36,10 +32,11 @@ class TGFileHandler:
             path = message.text[message.text.find(' ')+1 : ]
 
         size = os.path.getsize(path)
+        file_name = os.path.basename(path)
 
         if (size > 2097152000):
             msg = message.reply('Splitting...', True)
-            new_path = os.path.join(os.path.dirname(path), 'cache')
+            new_path = os.path.join(path, '/')
             if os.path.exists(new_path) is False:
                 os.mkdir(new_path)
             os.system(f'rar -m0 a -v2097152000B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
@@ -50,7 +47,6 @@ class TGFileHandler:
             shutil.rmtree(new_path)
         else:
             msg = message.reply('Uploading...', True)
-            file_name = os.path.basename(path)
             message.reply_document(path, True, caption=f'`{file_name}`', progress=TGFileHandler.progress, 
                                    progress_args=['Up', msg, t.time(), file_name], file_name=file_name)
         msg.delete()
@@ -59,7 +55,7 @@ class TGFileHandler:
         print(message.text)
         global file_path
         msg = message.reply('Downloading...', True)
-        if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com'):
+        if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com/'):
             file_path = GDL.download(message)
         elif len(message.command) > 1 and message.command[1].startswith('http'):
             file_path = DDL.download(message, msg)
