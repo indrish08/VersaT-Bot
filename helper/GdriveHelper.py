@@ -10,6 +10,8 @@ class GdriveHelper:
             if os.path.exists(f'./downloads/{file_name}'):
                 os.remove(f'./downloads/{file_name}')
             os.rename(file_name, f'./downloads/{file_name}')
-            msg.edit_text(f"Downloaded successfully to: \n`downloads\{file_name}`")
+            return f'downloads/{file_name}'
+            # msg.edit_text(f"Downloaded successfully to: \n`downloads\{file_name}`")
         else:
-            msg.edit_text("Downloaded Failed!")
+            return 'Downloaded Failed!'
+            # msg.edit_text("Downloaded Failed!")

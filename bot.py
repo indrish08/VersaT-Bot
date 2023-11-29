@@ -4,19 +4,26 @@ from helper.TGFileHandler import TGFileHandler
 from time import time
 import os
 import subprocess
-from pyrogram import Client, emoji, filters
-# from pyrogram.types import BotCommand
+from pyrogram import Client, idle, emoji, filters
+from pyrogram.types import BotCommand
 import utils
 
 api_id = config.api_id
 api_hash = config.api_hash
 bot_token = config.bot_token
+ids = [1118476751, -1001956807784] # [5502597376]
+bot_commands = [
+    BotCommand('start','Check bot alive status.'),
+    BotCommand('help', 'Get available commands.'),
+    BotCommand('ls', 'Get list of available files and folders.'),
+    BotCommand('download', 'or /dl to download files.'),
+    BotCommand('upload', 'or /up to upload files.'),
+    BotCommand('exec', 'or /e to execute shell commands.'),
+    BotCommand('speedtest', 'or /st to check internet speed.'),
+    BotCommand('ping', 'Check ping.')
+]
 
 app = Client("VersaT-bot", api_id, api_hash, bot_token=bot_token)
-
-@app.on_message(filters.command(['ping', 'p']))
-async def ping_cmd(client, message):
-    await utils.ping(client, message)
 
 @app.on_message(filters.command(['start']))
 def start_cmd(client, message):
@@ -50,6 +57,10 @@ def speedtest_cmd(client, message):
 def forward(client, message):
     utils.forward(client, message)
 
+@app.on_message(filters.command(['ping', 'p']))
+async def ping_cmd(client, message):
+    await utils.ping(client, message)
+
 # @app.on_message()
 # def hello(client, message):
 #     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
@@ -58,5 +69,12 @@ def forward(client, message):
 
 if not os.path.exists('./downloads'):
     os.mkdir('downloads')
-print("Starting Bot...") 
-app.run()  # Automatically start() and idle()
+
+async def main():
+    await app.start()
+    print("Starting Bot...") 
+    await utils.sendStartMessage(app,ids)
+    # await app.set_bot_commands(bot_commands)
+    await idle()
+    
+app.run(main())

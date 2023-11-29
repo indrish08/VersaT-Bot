@@ -3,9 +3,7 @@ import subprocess
 import time as t
 from speedtest import Speedtest
 
-from pyrogram import Client, emoji, filters
-
-async def ping(_, message):
+async def ping(client, message):
     print(message.text)
     start_time = t.time()
     reply = await message.reply('Pinging...',True)
@@ -20,8 +18,8 @@ def help(client, message):
     print(message.text)
     help_text = \
             "Here are the available commands:\n" + \
-            "- /start - Start using the bot.\n" + \
-            "- /help - Display this help message.\n" + \
+            "- /start - Check bot alive status.\n" + \
+            "- /help - Get available commands.\n" + \
             "- /ls - List directory.\n" + \
             "- /download - or /dl to download files.\n" + \
             "- /upload - or /up to upload files.\n" + \
@@ -42,8 +40,9 @@ def list_directory(client, message):
         if(os.path.isdir(path_i)):
             files += f'\n📁 `{i}`'
     for i in list_dir:
-        if(not os.path.isdir(i)):
-            size = size_h(os.path.getsize(os.path.join(path,i)))
+        path_i = os.path.join(path,i)
+        if(os.path.isdir(path_i) is False):
+            size = size_h(os.path.getsize(path_i))
             files += f'\n`{i}` [{size}]'
     message.reply(files, True)
 
@@ -83,6 +82,7 @@ def speedtest(_, message):
         f'Download : {size_h(res["download"]/8)} / s\n' + \
         f'Upload : {size_h(res["upload"]/8)} / s'
     message.reply_photo(res['share'], True, text)
+    message.reply_text(res)
     msg.delete()
 
 def forward(client, message):
@@ -109,6 +109,10 @@ def forward(client, message):
 def size_h(size, decimal_point=2):
     for x in ['B', 'KB', 'MB', 'GB', 'TB']:
         if size < 1024.0:
-            return f'{size:.2f} {x}'
+            return f'{size:.{decimal_point}f}{x}'
         size /= 1024.0
     return f"{size:.{decimal_point}f}{x}"
+
+async def sendStartMessage(app, ids):
+    for id in ids:
+        await app.send_message(id,'Bot Started!')
