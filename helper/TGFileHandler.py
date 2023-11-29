@@ -1,5 +1,6 @@
 from helper.DirectLinkDL import DirectLinkDL as DDL
 from helper.GdriveHelper import GdriveHelper as GDL
+from config import split_size
 from utils import size_h
 
 import os
@@ -34,12 +35,12 @@ class TGFileHandler:
         size = os.path.getsize(path)
         file_name = os.path.basename(path)
 
-        if (size > 2097152000):
+        if (size > split_size):
             msg = message.reply('Splitting...', True)
-            new_path = os.path.join(path, '/')
+            new_path = f'{path}_rar/'
             if os.path.exists(new_path) is False:
                 os.mkdir(new_path)
-            os.system(f'rar -m0 a -v2097152000B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
+            os.system(f'rar -m0 a -v{split_size}B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
             files = sorted(os.listdir(new_path))
             for file in files:
                 message.reply_document(os.path.join(new_path, file), True, caption=f'`{file}`', progress=TGFileHandler.progress, 
