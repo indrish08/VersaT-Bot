@@ -4,7 +4,6 @@ import gdown
 class GdriveHelper:
     def download(message):
         url = message.command[1]
-        msg = message.reply('Downloading...', True)
         file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
         if file_name:
             if os.path.exists(f'./downloads/{file_name}'):
