@@ -4,4 +4,4 @@ urllib3
 gdown
 py7zr
 speedtest-cli
-python-rclone
+rclone-python
