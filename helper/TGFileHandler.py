@@ -42,12 +42,12 @@ def upload_media(client, message):
         os.system(f'rar -m0 a -v{split_size}B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
         files = sorted(os.listdir(new_path))
         for file in files:
-            message.reply_document(os.path.join(new_path, file), True, caption=f'`{file}`', progress=TGFileHandler.progress, 
+            message.reply_document(os.path.join(new_path, file), True, caption=f'`{file}`', progress=progress, 
                                     progress_args=['Up', msg, t.time(), file], file_name=file)
         shutil.rmtree(new_path)
     else:
         msg = message.reply('Uploading...', True)
-        message.reply_document(path, True, caption=f'`{file_name}`', progress=TGFileHandler.progress, 
+        message.reply_document(path, True, caption=f'`{file_name}`', progress=progress, 
                                 progress_args=['Up', msg, t.time(), file_name], file_name=file_name)
     msg.delete()
 
