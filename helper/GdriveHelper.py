@@ -1,16 +1,22 @@
 import os
 import gdown
 
-class GdriveHelper:
-    def download(message):
-        url = message.command[1]
-        file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
-        if file_name:
-            if os.path.exists(f'./downloads/{file_name}'):
-                os.remove(f'./downloads/{file_name}')
-            os.rename(file_name, f'./downloads/{file_name}')
-            return f'downloads/{file_name}'
-            # msg.edit_text(f"Downloaded successfully to: \n`downloads\{file_name}`")
-        else:
-            return 'Downloaded Failed!'
-            # msg.edit_text("Downloaded Failed!")
+def download(url):
+    if url.startswith('https://drive.google.com/file/'):
+        download_file(url)
+    else:
+        download_folder(url)
+
+def download_file(url):
+    file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
+    if file_name:
+        if os.path.exists(f'./downloads/{file_name}'):
+            os.remove(f'./downloads/{file_name}')
+        os.rename(file_name, f'./downloads/{file_name}')
+        return f'downloads/{file_name}'
+    else:
+        return None
+
+def download_folder(url):
+    file_names = gdown.download_folder('https://drive.google.com/drive/folders/1jVUyvqV_wjRhbYSLeLGfP-NH6n6at81i?usp=sharing')
+    return file_names

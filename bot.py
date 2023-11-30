@@ -1,5 +1,5 @@
 import config
-from helper.TGFileHandler import TGFileHandler
+import helper.TGFileHandler as TGFileHandler
 
 from time import time
 import os
