@@ -5,3 +5,5 @@ gdown
 py7zr
 speedtest-cli
 rclone-python
+yt-dlp
+psutil

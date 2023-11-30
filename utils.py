@@ -1,6 +1,7 @@
 import os
 import subprocess
 import time as t
+from psutil import disk_usage, virtual_memory, swap_memory, cpu_percent, cpu_count, boot_time, net_io_counters
 from speedtest import Speedtest
 
 async def ping(client, message):
@@ -84,6 +85,28 @@ def speedtest(_, message):
     message.reply_photo(res['share'], True, text)
     msg.delete()
 
+def system_info(client, message):
+    total, used, free, disk_usage_percentage = disk_usage('/')
+    swap = swap_memory()
+    memory = virtual_memory()
+    uptime = t.time() - boot_time()
+    text = (
+        f"Total Disk Space: {size_h(total)}\n"
+        f"Used : {size_h(used)} | Free : {size_h(free)}\n\n"
+        f"Resourse Usage :\n"
+        f"CPU : {cpu_percent(interval=0.5)}% | RAM : {memory.percent}% | Disk : {disk_usage_percentage}%\n\n"
+        f"CPU Cores Count: \n"
+        f"Physical : {cpu_count(logical=False)} | Total : {cpu_count()}\n\n"
+        f"Total RAM : {size_h(memory.total)}\n"
+        f"Used : {size_h(memory.used)} | Free : {size_h(memory.available)}\n"
+        f"Swap Memory : {size_h(swap.total)} | Used : {swap.percent}%\n\n"
+        f"Bandwidth :\n"
+        f"Upload : {size_h(net_io_counters().bytes_sent)} | Download : {size_h(net_io_counters().bytes_recv)}\n\n"
+        f"OS Uptime : {time_h(uptime)}"
+    )
+    message.reply(text,True)
+
+
 def forward(client, message):
     print(message.text)
     target_chat = 'tg_premium_today'
@@ -111,6 +134,14 @@ def size_h(size, decimal_point=2):
             return f'{size:.{decimal_point}f}{x}'
         size /= 1024.0
     return f"{size:.{decimal_point}f}{x}"
+
+def time_h(seconds):
+    seconds = seconds % (24 * 3600)
+    hour = seconds // 3600
+    seconds %= 3600
+    minutes = seconds // 60
+    seconds %= 60
+    return "%dh %02dm %02ds" % (hour, minutes, seconds)
 
 async def sendStartMessage(app, ids):
     for id in ids:

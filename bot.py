@@ -58,6 +58,10 @@ def exec_cmd(client, message):
 def speedtest_cmd(client, message):
     utils.speedtest(client, message)
 
+@app.on_message(filters.command(['systeminfo']))
+def system_info_cmd(client, message):
+    utils.system_info(client, message)
+
 @app.on_message(filters.command(['forward', 'f']))
 def forward(client, message):
     utils.forward(client, message)
