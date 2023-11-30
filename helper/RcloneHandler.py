@@ -1,4 +1,4 @@
-import rclone_python.rclone as rc
+import rclone as rc
 import os
 
 import urllib.parse
@@ -11,7 +11,7 @@ def download(message):
     return os.path.join('downloads', os.path.basename(path))
 
 def download_from_path(path):
-    rc.copy(path, os.path.join(os.getcwd(), 'downloads', os.path.basename(path)))
+    os.system(f'rclone copy "{path}" "{os.path.join(os.getcwd(), "downloads", os.path.basename(path))}"')
     
 def get_path_from_alc(url):
     path = url[69:].replace('/', ':', 1)
