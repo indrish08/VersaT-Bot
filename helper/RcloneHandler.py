@@ -11,7 +11,7 @@ def download(message):
     return os.path.join('downloads', os.path.basename(path))
 
 def download_from_path(path):
-    rc.copy(path, os.path.join(os.getcwd(),'downloads'))
+    rc.copy(path, os.path.join(os.getcwd(), 'downloads', os.path.basename(path)))
     
 def get_path_from_alc(url):
     path = url[69:].replace('/', ':', 1)
