@@ -1,4 +1,3 @@
-import rclone as rc
 import os
 
 import urllib.parse
