@@ -3,9 +3,9 @@ import gdown
 
 def download(url):
     if url.startswith('https://drive.google.com/file/'):
-        download_file(url)
+        return download_file(url)
     else:
-        download_folder(url)
+        return download_folder(url)[0]
 
 def download_file(url):
     file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
