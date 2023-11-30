@@ -1,5 +1,6 @@
 import helper.DirectLinkDL as DDL
 import helper.GdriveHelper as GDL
+import helper.RcloneHandler as RC
 from config import split_size
 from utils import size_h
 
@@ -21,16 +22,26 @@ async def progress(current, total, type, msg, start, file_name):
             f"**Progress :** {size_h(current)} of {size_h(total)}"
         await msg.edit_text(txt)
 
-def upload_media(client, message):
+def upload(client, message):
     print(message.text)
     if (len(message.command) == 1):
         message.reply('Give link or file path to Upload.', True)
         return
+    if message.command[1].startswith('https://alchemist.cyou/'):
+        path = RC.download(message)
+    elif message.command[1].startswith('https://drive.google.com/'):
+        path = GDL.download(message.command[1])
     elif message.command[1].startswith('http'):
         path = DDL.download(message)
     else:
         path = message.text[message.text.find(' ')+1 : ]
 
+    if os.path.isdir(path):
+        upload_folder(path, message)
+    else:
+        upload_media(path, message)
+
+def upload_media(path, message):
     size = os.path.getsize(path)
     file_name = os.path.basename(path)
 
@@ -55,18 +66,34 @@ def download_media(client, message, progress=progress):
     print(message.text)
     global file_path
     msg = message.reply('Downloading...', True)
-    if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com/'):
+    if len(message.command) == 1:
+        if message.reply_to_message and message.reply_to_message.media:
+            reply_msg = message.reply_to_message
+            file_name = reply_msg.document.file_name if reply_msg.document is not None else reply_msg.video.file_name
+            file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, t.time(), file_name])
+        else:
+            message.reply_text("Please tag a media message with the /download command.", True)
+        return
+    elif message.command[1].startswith('https://alchemist.cyou/'):
+        file_path = RC.download(message)
+    elif message.command[1].startswith('https://drive.google.com/'):
         file_path = GDL.download(message.command[1])
-    elif len(message.command) > 1 and message.command[1].startswith('http'):
+    elif message.command[1].startswith('http'):
         file_path = DDL.download(message, msg)
-    elif message.reply_to_message and message.reply_to_message.media:
-        reply_msg = message.reply_to_message
-        file_name = reply_msg.document.file_name if reply_msg.document is not None else reply_msg.video.file_name
-        file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, t.time(), file_name])
-    else:
-        message.reply_text("Please tag a media message with the /download command.", True)
     
     if file_path is None:
         msg.edit_text('Downloaded Failed!')
     else:
         msg.edit_text("Downloaded successfully to: \n`{}`".format(file_path.replace('\\', '/')))
+
+def upload_folder(path, message):
+    message.reply(f"**Folder : {os.path.basename(path)}**",True)
+    for file in sorted(os.listdir(path)):
+        file = os.path.join(path,file)
+        if(os.path.isdir(file)):
+            upload_folder(file, message)
+        else:
+            upload_media(file, message)
+            t.sleep(1)
+    message.reply(f"**Folder '{os.path.basename(path)}' Completed.**",True)
+    

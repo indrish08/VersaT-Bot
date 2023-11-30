@@ -2,7 +2,7 @@ import os
 import urllib.parse
 import urllib.request
 
-def download(message, msg):
+def download(message):
     file_name = os.path.basename(message.command[1])
     os.system(f'wget -q "{message.command[1]}" -P ./downloads')
     return f'downloads/{file_name}'

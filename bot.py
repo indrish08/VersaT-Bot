@@ -1,5 +1,6 @@
 import config
 import helper.TGFileHandler as TGFileHandler
+import helper.RcloneHandler as RC
 
 from time import time
 import os
@@ -39,11 +40,15 @@ def list_directory_cmd(client, message):
 
 @app.on_message(filters.command(['upload', 'up']))
 def upload_media_cmd(client, message):
-    TGFileHandler.upload_media(client, message)
+    TGFileHandler.upload(client, message)
 
 @app.on_message(filters.command(['download', 'dl']))
 def download_media_cmd(client, message):
     TGFileHandler.download_media(client, message)
+      
+@app.on_message(filters.command(['rclone', 'rc']))
+def rclone_dl_cmd(client, message):
+    RC.download(message)
       
 @app.on_message(filters.command(['exec', 'e']))
 def exec_cmd(client, message):
