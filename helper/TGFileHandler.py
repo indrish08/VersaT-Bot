@@ -56,7 +56,7 @@ def download_media(client, message, progress=progress):
     global file_path
     msg = message.reply('Downloading...', True)
     if len(message.command) > 1 and message.command[1].startswith('https://drive.google.com/'):
-        file_path = GDL.download(message)
+        file_path = GDL.download(message.command[1])
     elif len(message.command) > 1 and message.command[1].startswith('http'):
         file_path = DDL.download(message, msg)
     elif message.reply_to_message and message.reply_to_message.media:
