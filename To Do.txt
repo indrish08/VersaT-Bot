@@ -1,2 +1,5 @@
 Authorized User
-Download reply-chain media
+progress
+    speed
+    eta
+    x of total
