@@ -86,7 +86,7 @@ def speedtest(_, message):
     msg.delete()
 
 def system_info(client, message):
-    total, used, free, disk_usage_percentage = disk_usage('/')
+    total, used, free, disk_usage_percentage = disk_usage(os.getcwd())
     swap = swap_memory()
     memory = virtual_memory()
     uptime = t.time() - boot_time()
