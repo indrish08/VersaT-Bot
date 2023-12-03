@@ -83,7 +83,7 @@ def upload(client, message):
         upload_folder(path, message)
     else:
         upload_media(path, message)
-    message.reply(f"Upload Completed : {os.path.basename(path)}")
+    message.reply(f"**Upload Completed : {os.path.basename(path)}**")
 
 def download_media(client, message, progress=progress):
     print(message.text)
