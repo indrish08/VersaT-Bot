@@ -22,6 +22,6 @@ def copy(message):
     if message.command[1].startswith('https://alchemist.cyou/'):
         path = get_path_from_alc(message.command[1])
     msg = message.reply('Transfer Started...')
-    os.system(f'rclone copy "{path}" "bot:{os.path.basename(path)}"')
+    os.system(f'rclone copy "{path}" "bot:{os.path.basename(path)}" -P')
     msg.delete()
     message.reply('Transfer Completed...')
