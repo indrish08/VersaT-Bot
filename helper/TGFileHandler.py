@@ -28,25 +28,29 @@ def upload_media(path, message, reply_to = None):
     reply_to = message.id if reply_to == None else reply_to
 
     if (size > split_size):
-        msg = message.reply('Splitting...', True)
+        msg = message.reply(('Splitting...\n', f'{file_name}'), True)
         new_path = f'{path}_rar/'
         if os.path.exists(new_path) is False:
             os.mkdir(new_path)
         os.system(f'rar -m0 a -v{split_size}B \"{os.path.join(new_path, file_name)}\" \"{path}\"')
+        msg.delete()
         files = sorted(os.listdir(new_path))
         for file in files:
+            msg = message.reply('Uploading...', True)
             reply = message.reply_document(os.path.join(new_path, file), caption=f'`{file}`', progress=progress, 
                                     progress_args=['Up', msg, t.time(), file], file_name=file, reply_to_message_id=reply_to)
+            reply_to = reply.id
+            msg.delete()
         shutil.rmtree(new_path)
     else:
         msg = message.reply('Uploading...', True)
-        if file_name.endswith('.mkv') or file_name.endswith('.mp4'):
-            reply = message.reply_video(path, caption=f'`{file_name}`', supports_streaming=True, reply_to_message_id=reply_to, 
-                                        progress=progress, progress_args=['Up', msg, t.time(), file_name])
-        else:
-            reply = message.reply_document(path, caption=f'`{file_name}`', progress=progress, 
+        # if file_name.endswith('.mkv', '.mp4', '.webm', '.m4v'):
+        #     reply = message.reply_video(path, caption=f'`{file_name}`', supports_streaming=True, reply_to_message_id=reply_to, 
+        #                                 progress=progress, progress_args=['Up', msg, t.time(), file_name])
+        # else:
+        reply = message.reply_document(path, caption=f'`{file_name}`', progress=progress, 
                                     progress_args=['Up', msg, t.time(), file_name], file_name=file_name, reply_to_message_id=reply_to)
-    msg.delete()
+        msg.delete()
     return reply
 
 def upload_folder(path, message, reply_to = None):
