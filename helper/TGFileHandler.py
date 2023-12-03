@@ -75,7 +75,7 @@ def upload(client, message):
         message.reply('Give link or file path to Upload.', True)
         return
     if message.command[1].startswith('http'):
-        path = download_media(message)
+        path = download_media(client, message)
     else:
         path = message.text[message.text.find(' ')+1 : ]
 
@@ -104,8 +104,8 @@ def download_media(client, message, progress=progress):
     elif message.command[1].startswith('http'):
         file_path = DDL.download(message)
     
+    msg.delete()
     if file_path is None:
         message.reply_text('Downloaded Failed!',True)
     else:
         message.reply_text("Downloaded successfully to: \n`{}`".format(file_path.replace('\\', '/')), True)
-    msg.delete()
