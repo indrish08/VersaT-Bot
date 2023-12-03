@@ -47,8 +47,8 @@ def download_media_cmd(client, message):
     TGFileHandler.download_media(client, message)
       
 @app.on_message(filters.command(['rclone', 'rc']))
-def rclone_dl_cmd(client, message):
-    RC.download(message)
+def rclone_copy_cmd(client, message):
+    RC.copy(message)
       
 @app.on_message(filters.command(['exec', 'e']))
 def exec_cmd(client, message):
