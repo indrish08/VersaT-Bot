@@ -40,8 +40,12 @@ def upload_media(path, message, reply_to = None):
         shutil.rmtree(new_path)
     else:
         msg = message.reply('Uploading...', True)
-        reply = message.reply_document(path, caption=f'`{file_name}`', progress=progress, 
-                                progress_args=['Up', msg, t.time(), file_name], file_name=file_name, reply_to_message_id=reply_to)
+        if file_name.endswith('.mkv') or file_name.endswith('.mp4'):
+            reply = message.reply_video(path, caption=f'`{file_name}`', supports_streaming=True, reply_to_message_id=reply_to, 
+                                        progress=progress, progress_args=['Up', msg, t.time(), file_name])
+        else:
+            reply = message.reply_document(path, caption=f'`{file_name}`', progress=progress, 
+                                    progress_args=['Up', msg, t.time(), file_name], file_name=file_name, reply_to_message_id=reply_to)
     msg.delete()
     return reply
 

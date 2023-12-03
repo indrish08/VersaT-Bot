@@ -143,6 +143,6 @@ def time_h(seconds):
     seconds %= 60
     return "%dh %02dm %02ds" % (hour, minutes, seconds)
 
-async def sendStartMessage(app, ids):
+async def sendMessage(app, ids, event):
     for id in ids:
-        await app.send_message(id,'Bot Started!')
+        await app.send_message(id,f'Bot {event}ed!')

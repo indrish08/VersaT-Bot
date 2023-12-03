@@ -70,6 +70,16 @@ def forward(client, message):
 async def ping_cmd(client, message):
     await utils.ping(client, message)
 
+@app.on_message(filters.command(['restart', 'r']))
+async def restart(_,__):
+    print("Restarting Bot...") 
+    await app.stop()
+    await app.start()
+    print("Restarting Bot...") 
+    await utils.sendMessage(app, ids, 'Restart')
+    # await app.set_bot_commands(bot_commands)
+    await idle()
+
 # @app.on_message()
 # def hello(client, message):
 #     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
@@ -82,7 +92,7 @@ if not os.path.exists('./downloads'):
 async def main():
     await app.start()
     print("Starting Bot...") 
-    await utils.sendStartMessage(app,ids)
+    await utils.sendMessage(app, ids, 'Start')
     # await app.set_bot_commands(bot_commands)
     await idle()
     
