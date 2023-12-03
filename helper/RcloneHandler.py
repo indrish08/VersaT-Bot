@@ -16,3 +16,12 @@ def get_path_from_alc(url):
     path = url[69:].replace('/', ':', 1)
     path = urllib.parse.unquote(urllib.parse.unquote(path).replace('•','-'))
     return path
+
+def copy(message):
+    path = message.command[1]
+    if message.command[1].startswith('https://alchemist.cyou/'):
+        path = get_path_from_alc(message.command[1])
+    msg = message.reply('Transfer Started...')
+    os.system(f'rclone copy "{path}" "bot:"')
+    msg.delete()
+    message.reply('Transfer Completed...')
