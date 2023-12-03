@@ -109,3 +109,4 @@ def download_media(client, message, progress=progress):
         message.reply_text('Downloaded Failed!',True)
     else:
         message.reply_text("Downloaded successfully to: \n`{}`".format(file_path.replace('\\', '/')), True)
+    return file_path
