@@ -28,7 +28,7 @@ def upload_media(path, message, reply_to = None):
     reply_to = message.id if reply_to == None else reply_to
 
     if (size > split_size):
-        msg = message.reply(('Splitting...\n', f'{file_name}'), True)
+        msg = message.reply(f'Splitting...\n{file_name}', True)
         new_path = f'{path}_rar/'
         if os.path.exists(new_path) is False:
             os.mkdir(new_path)
