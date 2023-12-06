@@ -10,7 +10,7 @@ def download(message):
     return loc_path
 
 def download_from_path(path):
-    dest = os.path.join(os.getcwd(), "downloads", os.path.basename(path))
+    dest = os.path.join("downloads", os.path.basename(path))
     os.system(f'rclone copy "{path}" "{dest}"')
     return dest
     
