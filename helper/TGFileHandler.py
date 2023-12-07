@@ -110,3 +110,23 @@ def download_media(client, message, progress=progress):
     else:
         message.reply_text("Downloaded successfully to: \n`{}`".format(file_path.replace('\\', '/')), True)
     return file_path
+
+
+def TG_link_dl(client, message):
+    print(message.text)
+    if message.reply_to_message:
+        str = message.reply_to_message.text
+    else:
+        str = message.text[message.text.find(' ')+1 : ]
+    index = str.rfind('/')
+    msg_id = (int(str[index+1 : ]))
+    chat_id = (str[str.rfind('/',0,index)+1 : index])
+    video = client.get_messages(chat_id,msg_id)
+    file_name = video.document.file_name if video.document is not None else video.video.file_name
+    msg = message.reply('Downloading...', True)
+    file_path = client.download_media(video, progress=progress, progress_args=['Down', msg, t.time(), file_name])
+    msg.delete()
+    if file_path is None:
+        message.reply_text('Downloaded Failed!',True)
+    else:
+        message.reply_text("Downloaded successfully to: \n`{}`".format(file_path.replace('\\', '/')), True)

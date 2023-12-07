@@ -80,6 +80,10 @@ async def restart(_,__):
     # await app.set_bot_commands(bot_commands)
     await idle()
 
+@app.on_message(filters.command(['tg']))
+def TG_link_dl_cld(client, message):
+    TGFileHandler.TG_link_dl(client, message)
+
 # @app.on_message()
 # def hello(client, message):
 #     print(message.from_user.id, '-', message.from_user.first_name, ':', message.text)
