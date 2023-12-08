@@ -2,10 +2,10 @@ import os
 import gdown
 
 def download(url):
-    if url.startswith('https://drive.google.com/file/'):
-        return download_file(url)
-    else:
+    if 'folder' in url:
         return download_folder(url)
+    else:
+        return download_file(url)
 
 def download_file(url):
     file_name = gdown.download(url, quiet=True, resume=True, fuzzy=True)
@@ -18,8 +18,8 @@ def download_file(url):
         return None
 
 def download_folder(url):
-    file_names = gdown.download_folder('https://drive.google.com/drive/folders/1jVUyvqV_wjRhbYSLeLGfP-NH6n6at81i?usp=sharing')
+    file_names = gdown.download_folder(url)
     if file_names:
-        return os.path.dirname(file_names[0])
+        return f'downloads/{os.path.dirname(file_names[0])}'
     else:
         return None
