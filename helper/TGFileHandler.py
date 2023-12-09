@@ -10,6 +10,9 @@ import subprocess
 import time as t
 import math
 
+
+indexs = ['alchemist.cyou', 'jackdrive038.workers.dev']
+
 async def progress(current, total, type, msg, start, file_name):
     now = t.time()
     diff = now - start
@@ -88,7 +91,6 @@ def upload(client, message):
 def download_media(client, message, progress=progress):
     print(message.text)
     global file_path
-    msg = message.reply('Downloading...', True)
     if len(message.command) == 1:
         if message.reply_to_message and message.reply_to_message.media:
             reply_msg = message.reply_to_message
@@ -97,7 +99,8 @@ def download_media(client, message, progress=progress):
         else:
             message.reply_text("Please tag a media message with the /download command.", True)
         return
-    if message.command[1].startswith('https://alchemist.cyou/'):
+    msg = message.reply('Downloading...', True)
+    if any(i in message.command[1] for i in indexs):
         file_path = RC.download(message)
     elif message.command[1].startswith('https://drive.google.com/'):
         file_path = GDL.download(message.command[1])
