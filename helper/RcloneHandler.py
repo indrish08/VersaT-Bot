@@ -22,7 +22,7 @@ def get_path_from_alc(url):
     return path
 
 def get_path_from_jackindex(url):
-    path = url[43:]
+    path = url[43:-1] if url[-1] == '/' else url[43:]
     path = f'bot:{(urllib.parse.unquote(path))}'
     return path
 
