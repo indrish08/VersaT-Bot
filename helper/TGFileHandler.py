@@ -91,15 +91,18 @@ def upload(client, message):
 def download_media(client, message, progress=progress):
     print(message.text)
     global file_path
+    msg = message.reply('Downloading...', True)
     if len(message.command) == 1:
         if message.reply_to_message and message.reply_to_message.media:
             reply_msg = message.reply_to_message
-            file_name = reply_msg.document.file_name if reply_msg.document is not None else reply_msg.video.file_name
-            file_path = client.download_media(message.reply_to_message, progress=progress, progress_args=['Down', msg, t.time(), file_name])
+            file_name = reply_msg.document.file_name or reply_msg.video.file_name or \
+                        reply_msg.photo.file_name or reply_msg.audio.file_name or \
+                        reply_msg.voice.file_name or reply_msg.videonote.file_name
+            file_path = client.download_media(reply_msg, progress=progress, progress_args=['Down', msg, t.time(), file_name])
         else:
+            msg.delete()
             message.reply_text("Please tag a media message with the /download command.", True)
         return
-    msg = message.reply('Downloading...', True)
     if any(i in message.command[1] for i in indexs):
         file_path = RC.download(message)
     elif message.command[1].startswith('https://drive.google.com/'):
@@ -124,10 +127,12 @@ def TG_link_dl(client, message):
     index = str.rfind('/')
     msg_id = (int(str[index+1 : ]))
     chat_id = (str[str.rfind('/',0,index)+1 : index])
-    video = client.get_messages(chat_id,msg_id)
-    file_name = video.document.file_name if video.document is not None else video.video.file_name
+    media = client.get_messages(chat_id,msg_id)
+    file_name = media.document.file_name or media.video.file_name or \
+                media.photo.file_name or media.audio.file_name or \
+                media.voice.file_name or media.videonote.file_name
     msg = message.reply('Downloading...', True)
-    file_path = client.download_media(video, progress=progress, progress_args=['Down', msg, t.time(), file_name])
+    file_path = client.download_media(media, progress=progress, progress_args=['Down', msg, t.time(), file_name])
     msg.delete()
     if file_path is None:
         message.reply_text('Downloaded Failed!',True)
