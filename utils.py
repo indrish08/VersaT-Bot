@@ -141,7 +141,12 @@ def time_h(seconds):
     seconds %= 3600
     minutes = seconds // 60
     seconds %= 60
-    return "%dh %02dm %02ds" % (hour, minutes, seconds)
+    if hour:
+        return "%dh %02dm %02ds" % (hour, minutes, seconds)
+    elif minutes:
+        return "%02dm %02ds" % (minutes, seconds)
+    else:
+        return "%02ds" % (seconds)
 
 async def sendMessage(app, ids, event):
     for id in ids:

@@ -2,7 +2,7 @@ import helper.DirectLinkDL as DDL
 import helper.GdriveHelper as GDL
 import helper.RcloneHandler as RC
 from config import split_size
-from utils import size_h
+from utils import size_h, time_h
 
 import os
 import shutil
@@ -18,11 +18,16 @@ async def progress(current, total, type, msg, start, file_name):
     diff = now - start
     if round(diff % 10.00) == 0 or current == total:
         val = current * 15 // total
+        speed = current / diff
+        elapsed_time = time_h(round(diff))
+        time_to_completion = time_h(round((total - current) / speed))
         txt = \
             f"**{type}loading...**\n" + \
             f"**File Name :** `{file_name}`\n" + \
             f"[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
-            f"**Progress :** {size_h(current)} of {size_h(total)}"
+            f"**Progress :** {size_h(current)} of {size_h(total)}\n" + \
+            f"**Elapsed :** {elapsed_time}\n" + \
+            f"**ETA :** {time_to_completion}"
         await msg.edit_text(txt)
 
 def upload_media(path, message, reply_to = None):
