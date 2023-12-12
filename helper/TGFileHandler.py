@@ -26,7 +26,7 @@ async def progress(current, total, type, msg, start, file_name):
             f"**File Name :** `{file_name}`\n" + \
             f"[{val*'▣'}{(15-val)*'▢'}] {current*100/total:.2f}%\n" + \
             f"**Progress :** {size_h(current)} of {size_h(total)}\n" + \
-            f"**Speed :** {time_h(speed)}/s\n" + \
+            f"**Speed :** {size_h(speed)}/s\n" + \
             f"**Elapsed :** {elapsed_time}\n" + \
             f"**ETA :** {time_to_completion}"
         await msg.edit_text(txt)
