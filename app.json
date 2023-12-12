@@ -1,9 +1,7 @@
 {
-    "stack": "heroku-20",
     "buildpacks": [
         {"url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"},
         {"url": "https://github.com/HasibulKabir/heroku-buildpack-rarlab.git"},
-        {"url": "https://github.com/opendoor-labs/heroku-buildpack-p7zip.git"},
         {"url": "https://github.com/amivin/aria2-heroku.git"},
         {"url": "https://github.com/code-pms/mediainfo_buildpack"},
         {"url": "https://github.com/erkutorenk/heroku-buildpack-mkvtoolnix"},
