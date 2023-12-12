@@ -16,7 +16,7 @@ indexs = ['alchemist.cyou', 'jackdrive038.workers.dev']
 async def progress(current, total, type, msg, start, file_name):
     now = t.time()
     diff = now - start
-    if round(diff % 10.00) == 0 or current == total:
+    if round(diff % 8.00) == 0 or current == total:
         val = current * 15 // total
         speed = current / diff
         elapsed_time = time_h(round(diff))
