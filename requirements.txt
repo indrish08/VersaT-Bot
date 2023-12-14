@@ -2,7 +2,6 @@ pyrogram
 TgCrypto
 urllib3
 gdown
-py7zr
 speedtest-cli
 rclone-python
 yt-dlp
