@@ -7,6 +7,7 @@ import os
 import subprocess
 from pyrogram import Client, idle, emoji, filters
 from pyrogram.types import BotCommand
+from pyrogram.handlers.message_handler import MessageHandler
 import utils
 
 api_id = config.api_id
@@ -26,6 +27,8 @@ bot_commands = [
 ]
 
 app = Client("VersaT-bot", api_id, api_hash, bot_token=bot_token)
+
+# app.add_handler(MessageHandler(utils.start, filters=filters.command(['start'])))
 
 @app.on_message(filters.command(['start']))
 def start_cmd(client, message):
