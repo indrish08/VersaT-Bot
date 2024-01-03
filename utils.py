@@ -100,7 +100,7 @@ def system_info(client, message):
         f"Total RAM : {size_h(memory.total)}\n"
         f"Used : {size_h(memory.used)} | Free : {size_h(memory.available)}\n"
         f"Swap Memory : {size_h(swap.total)} | Used : {swap.percent}%\n\n"
-        f"Bandwidth :\n"
+        f"Network :\n"
         f"Upload : {size_h(net_io_counters().bytes_sent)} | Download : {size_h(net_io_counters().bytes_recv)}\n\n"
         f"OS Uptime : {time_h(uptime)}"
     )
